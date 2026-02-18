@@ -20,7 +20,10 @@ jobs:
           sudo apt install -y build-essential ncurses-dev bison flex libssl-dev libelf-dev clang
 
       - name: Clone Kernel Source
-        run: git clone https://github.com/qliazar/htc_kernel_wildfire.git --depth=1
+        run: |
+          git clone https://github.com/qliazar/htc_kernel_wildfire.git --depth=1
+          cd htc_kernel_wildfire
+        
 
       - name: Get Toolchains
         run: |
@@ -30,9 +33,8 @@ jobs:
 
       - name: Build kernel
         run: |
-          cd htc_kernel_wildfire
           export ARCH=arm
-          export CROSS_COMPILE=$(pwd)/arm-eabi/bin/arm-eabi-
+          export CROSS_COMPILE=$(pwd)/bin/arm-eabi-
           make cyanogen_wildfire_defconfig
           make -j$(nproc)
 

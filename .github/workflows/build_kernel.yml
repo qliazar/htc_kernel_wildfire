@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: built-kernel
-          path: <kernel-source-dir>/arch/arm/boot/zImage
+          path: arch/arm/boot/zImage

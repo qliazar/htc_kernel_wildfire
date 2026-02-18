@@ -1,4 +1,4 @@
-name: Build Android Kernel
+name: Build zImage
 
 on:
   workflow_dispatch:
@@ -18,7 +18,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y build-essential ncurses-dev bison flex libssl-dev libelf-dev clang
-          # Add any other required dependencies
 
       - name: Clone kernel source
         run: git clone https://github.com/qliazar/htc_kernel_wildfire.git --depth=1
@@ -32,13 +31,12 @@ jobs:
         run: |
           cd htc_kernel_wildfire
           export ARCH=arm
-          export SUBARCH=arm
           export CROSS_COMPILE=/arm-eabi-4.4.3/bin/arm-eabi-
-          make cyanogenmod_wildfire_defconfig
+          make cyanogen_wildfire_defconfig
           make -j$(nproc)
 
       - name: Upload kernel artifact
         uses: actions/upload-artifact@v4
         with:
           name: built-kernel
-          path: <kernel-source-dir>/arch/arm64/boot/zImage # Adjust path as needed
+          path: <kernel-source-dir>/arch/arm/boot/zImage

@@ -19,10 +19,10 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential ncurses-dev bison flex libssl-dev libelf-dev clang
 
-      - name: Clone kernel source
+      - name: Clone Kernel Source
         run: git clone https://github.com/qliazar/htc_kernel_wildfire.git --depth=1
 
-      - name: Get toolchains
+      - name: Get Toolchains
         run: |
           wget https://android.googlesource.com/platform/prebuilt/+archive/6c89c6601a699707500003b782406482c4c3050b/linux-x86/toolchain/arm-eabi-4.4.3.tar.gz
           tar -xvf arm-eabi-4.4.3.tar.gz
@@ -31,11 +31,11 @@ jobs:
         run: |
           cd htc_kernel_wildfire
           export ARCH=arm
-          export CROSS_COMPILE=/arm-eabi-4.4.3/bin/arm-eabi-
+          export CROSS_COMPILE=/bin/arm-eabi-
           make cyanogen_wildfire_defconfig
           make -j$(nproc)
 
-      - name: Upload kernel artifact
+      - name: Upload Kernel
         uses: actions/upload-artifact@v4
         with:
           name: built-kernel

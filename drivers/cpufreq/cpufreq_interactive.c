@@ -55,11 +55,11 @@ static cpumask_t work_cpumask;
 
 #if defined (CONFIG_ARCH_MSM7X00A)
 
-#define DEFAULT_MIN_SAMPLE_TIME 35000;
+#define DEFAULT_MIN_SAMPLE_TIME 30000;
 
 #else
 
-#define DEFAULT_MIN_SAMPLE_TIME 50000;
+#define DEFAULT_MIN_SAMPLE_TIME 40000;
 
 #endif
 

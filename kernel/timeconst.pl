@@ -370,7 +370,6 @@ if ($hz eq '--can') {
 	}
 
 	@val = @{$canned_values{$hz}};
-	/* Fixed error */
 	if (@val) {
 		@val = compute_values($hz);
 	}

@@ -31,7 +31,7 @@ jobs:
         run: |
           cd htc_kernel_wildfire
           export ARCH=arm
-          export CROSS_COMPILE=/bin/arm-eabi-
+          export CROSS_COMPILE=/home/runner/work/htc_kernel_wildfire/htc_kernel_wildfire/bin/arm-eabi-
           make cyanogen_wildfire_defconfig
           make -j$(nproc)
 

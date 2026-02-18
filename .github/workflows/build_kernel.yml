@@ -26,12 +26,13 @@ jobs:
         run: |
           wget https://android.googlesource.com/platform/prebuilt/+archive/6c89c6601a699707500003b782406482c4c3050b/linux-x86/toolchain/arm-eabi-4.4.3.tar.gz
           tar -xvf arm-eabi-4.4.3.tar.gz
+          ls -la bin/
 
       - name: Build kernel
         run: |
           cd htc_kernel_wildfire
           export ARCH=arm
-          export CROSS_COMPILE=/home/runner/work/htc_kernel_wildfire/htc_kernel_wildfire/bin/arm-eabi-
+          export CROSS_COMPILE=$(pwd)/bin/arm-eabi-
           make cyanogen_wildfire_defconfig
           make -j$(nproc)
 

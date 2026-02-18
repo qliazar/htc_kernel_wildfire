@@ -34,7 +34,7 @@
 
 /* #include <linux/irq.h> */
 
-#define DEBUG_SDSLOT_VDD 1
+#define DEBUG_SDSLOT_VDD 0
 
 extern int msm_add_sdcc(unsigned int controller, struct mmc_platform_data *plat,
 			unsigned int stat_irq, unsigned long stat_irq_flags);
@@ -78,8 +78,8 @@ struct mmc_vdd_xlat {
 };
 
 static struct mmc_vdd_xlat mmc_vdd_table[] = {
-	{ MMC_VDD_28_29,	2850 },
-	{ MMC_VDD_29_30,	2900 },
+	{ MMC_VDD_28_29,	2825 },
+	{ MMC_VDD_29_30,	2875 },
 };
 
 static unsigned int sdslot_vdd = 0xffffffff;
@@ -253,7 +253,7 @@ EXPORT_SYMBOL(buzz_wifi_power);
 
 int buzz_wifi_reset(int on)
 {
-	printk(KERN_INFO "%s: do nothing\n", __func__);
+	// printk(KERN_INFO "%s: do nothing\n", __func__);
 	return 0;
 }
 

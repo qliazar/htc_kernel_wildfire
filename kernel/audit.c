@@ -66,13 +66,13 @@
 #define AUDIT_DISABLED		-1
 #define AUDIT_UNINITIALIZED	0
 #define AUDIT_INITIALIZED	1
-static int	audit_initialized;
+static int	audit_initialized = AUDIT_DISABLED;
 
 #define AUDIT_OFF	0
 #define AUDIT_ON	1
 #define AUDIT_LOCKED	2
-int		audit_enabled;
-int		audit_ever_enabled;
+int		audit_enabled = AUDIT_OFF;
+int		audit_ever_enabled = AUDIT_OFF;
 
 /* Default state when kernel boots without any parameters. */
 static int	audit_default;

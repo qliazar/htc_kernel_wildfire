@@ -25,8 +25,8 @@
 #include <crypto/sha.h>
 #include <asm/byteorder.h>
 
-#define BUFFER_SIZE 64;
-#define PAD_LIMIT 56;
+#define BUFFER_SIZE 64
+#define PAD_LIMIT 56
 
 static int sha1_init(struct shash_desc *desc)
 {

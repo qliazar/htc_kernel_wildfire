@@ -25,6 +25,9 @@
 #include <crypto/sha.h>
 #include <asm/byteorder.h>
 
+#define BUFFER_SIZE 64;
+#define PAD_LIMIT 56;
+
 static int sha1_init(struct shash_desc *desc)
 {
 	struct sha1_state *sctx = shash_desc_ctx(desc);
@@ -42,28 +45,33 @@ static int sha1_update(struct shash_desc *desc, const u8 *data,
 	struct sha1_state *sctx = shash_desc_ctx(desc);
 	unsigned int partial, done;
 	const u8 *src;
+	
+	if (len == 0) {
+		return 0;
+	}
 
-	partial = sctx->count & 0x3f;
+	partial = sctx->count & BUFFER_SIZE - 1;
 	sctx->count += len;
 	done = 0;
 	src = data;
 
-	if ((partial + len) > 63) {
+	if ((partial + len) > BUFFER_SIZE) {
 		u32 temp[SHA_WORKSPACE_WORDS];
 
 		if (partial) {
-			done = -partial;
-			memcpy(sctx->buffer + partial, data, done + 64);
+			unsigned int to_copy = BUFFER_SIZE - partial;			
+			memcpy(sctx->buffer + partial, data, to_copy);
 			src = sctx->buffer;
+			done = to_copy;
 		}
 
 		do {
 			sha_transform(sctx->state, src, temp);
-			done += 64;
+			done += BUFFER_SIZE;
 			src = data + done;
-		} while (done + 63 < len);
+		} while (done + BUFFER_SIZE < len);
 
-		memset(temp, 0, sizeof(temp));
+		// memset(temp, 0, sizeof(temp));
 		partial = 0;
 	}
 	memcpy(sctx->buffer + partial, src, len - done);
@@ -79,13 +87,13 @@ static int sha1_final(struct shash_desc *desc, u8 *out)
 	__be32 *dst = (__be32 *)out;
 	u32 i, index, padlen;
 	__be64 bits;
-	static const u8 padding[64] = { 0x80, };
+	static const u8 padding[BUFFER_SIZE] = { 0x80, };
 
 	bits = cpu_to_be64(sctx->count << 3);
 
 	/* Pad out to 56 mod 64 */
-	index = sctx->count & 0x3f;
-	padlen = (index < 56) ? (56 - index) : ((64+56) - index);
+	index = sctx->count & BUFFER_SIZE - 1;
+	padlen = (index < PAD_LIMIT) ? (PAD_LIMIT - index) : ((BUFFER_SIZE + PAD_LIMIT) - index);
 	sha1_update(desc, padding, padlen);
 
 	/* Append length */

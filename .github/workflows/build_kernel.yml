@@ -1,6 +1,7 @@
 name: Build zImage
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main 

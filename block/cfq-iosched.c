@@ -20,13 +20,13 @@
 static const int cfq_quantum = 4;
 static const int cfq_fifo_expire[2] = { HZ / 4, HZ / 8 };
 /* maximum backwards seek, in KiB */
-static const int cfq_back_max = 16 * 1024;
+static const int cfq_back_max = 4 * 1024;
 /* penalty of a backwards seek */
-static const int cfq_back_penalty = 2;
-static const int cfq_slice_sync = HZ / 10;
-static int cfq_slice_async = HZ / 25;
-static const int cfq_slice_async_rq = 2;
-static int cfq_slice_idle = HZ / 125;
+static const int cfq_back_penalty = 1;
+static const int cfq_slice_sync = HZ / 20;
+static int cfq_slice_async = HZ / 30;
+static const int cfq_slice_async_rq = 3;
+static int cfq_slice_idle = HZ / 250;
 
 /*
  * offset from end of service tree

@@ -26,11 +26,14 @@
 #define MD5_HMAC_BLOCK_SIZE	64
 #define MD5_BLOCK_WORDS		16
 #define MD5_HASH_WORDS		4
+#define MD5_MAC_BLOCK_SIZE 56
 
 #define F1(x, y, z)	(z ^ (x & (y ^ z)))
 #define F2(x, y, z)	F1(z, x, y)
 #define F3(x, y, z)	(x ^ y ^ z)
 #define F4(x, y, z)	(y ^ (x | ~z))
+#define LE_TO_CPUS __le32_to_cpus(buf)
+#define CPU_TO_LE __cpu_to_le32s(buf)
 
 #define MD5STEP(f, w, x, y, z, in, s) \
 	(w += f(x, y, z) + in, w = (w<<s | w>>(32-s)) + x)
@@ -128,7 +131,7 @@ static void md5_transform(u32 *hash, u32 const *in)
 static inline void le32_to_cpu_array(u32 *buf, unsigned int words)
 {
 	while (words--) {
-		__le32_to_cpus(buf);
+		LE_TO_CPUS;
 		buf++;
 	}
 }
@@ -136,7 +139,7 @@ static inline void le32_to_cpu_array(u32 *buf, unsigned int words)
 static inline void cpu_to_le32_array(u32 *buf, unsigned int words)
 {
 	while (words--) {
-		__cpu_to_le32s(buf);
+		CPU_TO_LE;
 		buf++;
 	}
 }
@@ -165,13 +168,13 @@ static int md5_update(struct shash_desc *desc, const u8 *data, unsigned int len)
 	struct md5_ctx *mctx = shash_desc_ctx(desc);
 	const u32 avail = sizeof(mctx->block) - (mctx->byte_count & 0x3f);
 
-	mctx->byte_count += len;
-
 	if (avail > len) {
 		memcpy((char *)mctx->block + (sizeof(mctx->block) - avail),
 		       data, len);
 		return 0;
 	}
+
+	mctx->byte_count += len;
 
 	memcpy((char *)mctx->block + (sizeof(mctx->block) - avail),
 	       data, avail);
@@ -197,14 +200,14 @@ static int md5_final(struct shash_desc *desc, u8 *out)
 	struct md5_ctx *mctx = shash_desc_ctx(desc);
 	const unsigned int offset = mctx->byte_count & 0x3f;
 	char *p = (char *)mctx->block + offset;
-	int padding = 56 - (offset + 1);
+	int padding = MD5_MAC_BLOCK_SIZE - (offset + 1);
 
 	*p++ = 0x80;
 	if (padding < 0) {
 		memset(p, 0x00, padding + sizeof (u64));
 		md5_transform_helper(mctx);
 		p = (char *)mctx->block;
-		padding = 56;
+		padding = MD5_MAC_BLOCK_SIZE;
 	}
 
 	memset(p, 0, padding);

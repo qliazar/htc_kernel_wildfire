@@ -326,7 +326,7 @@ CHECK		= sparse
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
 MODFLAGS	= -DMODULE
-KERNEL_FLAGS = -w -march=armv6 -mtune=arm1136j-s -munaligned-access -fgcse-lm -fgcse-sm -fsched-spec-load -ftree-vectorize -ffast-math -fsingle-precision-constant -pipe
+KERNEL_FLAGS = -w -march=armv6 -mtune=arm1136j-s -fgcse-lm -fgcse-sm -fsched-spec-load -ftree-vectorize -ffast-math -fsingle-precision-constant -pipe
 CFLAGS_MODULE   = $(MODFLAGS)
 AFLAGS_MODULE   = $(MODFLAGS)
 LDFLAGS_MODULE  = -T $(srctree)/scripts/module-common.lds

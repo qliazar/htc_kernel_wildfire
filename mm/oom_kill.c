@@ -28,9 +28,9 @@
 #include <linux/memcontrol.h>
 #include <linux/security.h>
 
-int sysctl_panic_on_oom;
-int sysctl_oom_kill_allocating_task;
-int sysctl_oom_dump_tasks;
+int sysctl_panic_on_oom = 0;
+int sysctl_oom_kill_allocating_task = 1;
+int sysctl_oom_dump_tasks = 0;
 static DEFINE_SPINLOCK(zone_scan_lock);
 /* #define DEBUG */
 

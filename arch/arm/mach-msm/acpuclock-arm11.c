@@ -109,38 +109,17 @@ struct clkctl_acpu_speed {
  * same PLL.
  */
 static struct clkctl_acpu_speed *acpu_freq_tbl;
-/* PLL0(mpll): 960MHz, PLL1(gpll):245.76MHz, PLL2(bpll): 1200MHz */
-static struct clkctl_acpu_speed msm7227_tbl[] = {
-	{  19200, ACPU_PLL_TCXO, 0, 0, 19200, 0, VDD_0, 30720, 0, -1, 4 },
-	{  120000, ACPU_PLL_0, 4, 7,  60000, 1, VDD_3, 61440, 0, -1, 5 },
-	{  122880, ACPU_PLL_1, 1, 1,  61440, 1, VDD_3, 61440, 0, -1, 4 },
-	{  200000, ACPU_PLL_2, 2, 5,  66667, 2, VDD_4, 61440, 0, -1, 6 },
-	{  245760, ACPU_PLL_1, 1, 0, 122880, 1, VDD_4, 122880, 0, -1, 7 },
-	{  320000, ACPU_PLL_0, 4, 2, 160000, 1, VDD_5, 160000, 0, 1, 7 },
-	{  400000, ACPU_PLL_2, 2, 2, 133333, 2, VDD_5, 160000, 0, 3, -1 },
-	{  480000, ACPU_PLL_0, 4, 1, 160000, 2, VDD_6, 160000, 0, 5, -1 },
-	{  600000, ACPU_PLL_2, 2, 1, 200000, 2, VDD_7, 200000, 0, 6, -1 },
-	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-};
 
 /* 7200a turbo mode, PLL0(mpll):245.76, PLL1(gpll):960, PLL2(bpll0):1056 */
 static struct clkctl_acpu_speed  msm72xx_tbl[] = {
 #if defined(CONFIG_TURBO_MODE)
 	{ 19200, ACPU_PLL_TCXO, 0, 0, 19200, 0, VDD_0, 30720, 0, 0, 4 },
 	{ 122880, ACPU_PLL_0, 4, 1, 61440, 1, VDD_1, 61440, 0, 0, 4 },
-#if 1 /* QCT fixup */
 	{ 160000, ACPU_PLL_1, 1, 5, 53333, 2, VDD_2, 61440, 0, 0, 6 },
-#else /* Google */
-	{ 160000, ACPU_PLL_1, 1, 5, 64000, 1, VDD_2, 61440, 0, 0, 6 },
-#endif
 	{ 176000, ACPU_PLL_2, 2, 5, 88000, 1, VDD_2, 61440, 0, 0, 5 },
 	{ 245760, ACPU_PLL_0, 4, 0, 81920, 2, VDD_3, 61440, 0, 0, 5 },
 	{ 352000, ACPU_PLL_2, 2, 2, 88000, 3, VDD_4, 128000, 0, 3, 7 },
-#if 1 /* QCT fixup */
 	{ 480000, ACPU_PLL_1, 1, 1, 120000, 3, VDD_5, 120000, 0, 2, -1 },
-#else /* Google */
-	{ 480000, ACPU_PLL_1, 1, 1, 128000, 3, VDD_5, 160000, 0, 2, -1 },
-#endif
 	{ 528000, ACPU_PLL_2, 2, 1, 132000, 3, VDD_5, 160000, 0, 5, -1, 0x1a },
 	{ 537600, ACPU_PLL_2, 2, 1, 132000, 3, VDD_6, 160000, 0, 5, -1, 0x1b },
 	{ 556800, ACPU_PLL_2, 2, 1, 132000, 3, VDD_6, 160000, 0, 5, -1, 0x1c },
@@ -174,15 +153,6 @@ static struct clkctl_acpu_speed  msm72xx_tbl[] = {
 
 #ifdef CONFIG_CPU_FREQ
 static struct cpufreq_frequency_table *freq_table;
-static struct cpufreq_frequency_table msm7227_freq_table[] = {
-	{ 0, 19200 },
-	{ 1, 122880 },
-	{ 2, 128000 },
-	{ 3, 245760 },
-	{ 4, 480000 },
-	{ 5, 600000 },
-	{ 6, CPUFREQ_TABLE_END },
-};
 
 static struct cpufreq_frequency_table msm72xx_freq_table[] = {
 #if defined(CONFIG_TURBO_MODE)
@@ -234,9 +204,6 @@ struct freq_tbl_map {
 };
 
 static struct freq_tbl_map acpu_freq_tbl_list[] = {
-	TABLE_CONFIG(LEGEND, 7227),
-	TABLE_CONFIG(LATTE, 7227),
-	TABLE_CONFIG(LIBERTY, 7227),
 	TABLE_CONFIG(BAHAMAS, 72xx),
 	TABLE_CONFIG(MEMPHIS, 72xx),
 	TABLE_CONFIG(PARADISE, 72xx),
